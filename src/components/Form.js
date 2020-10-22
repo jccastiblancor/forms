@@ -1,53 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import useForm from "../customHooks/useForm";
 
-const Form = () => {
-  const campos = {
-    Form1: [
-      { nombre: "nombre", tipo: "text" },
-      { nombre: "contraseña", tipo: "text" },
-    ],
-
-    Form2: [
-      { nombre: "mail", tipo: "mail" },
-      { nombre: "confirm mail", tipo: "mail" },
-      { nombre: "password", tipo: "password" },
-      { nombre: "confirm password", tipo: "password" },
-    ],
-  };
-
-  const [form, setForm] = useState("Form1");
-
-  const { handleChange, initialValues, handleSubmit } = useForm();
+const Form = ({ campos, handleClick, validateForm }) => {
+  const { handleChange, initialValues, handleSubmit, errors } = useForm(
+    validateForm
+  );
 
   useEffect(() => {
-    initialValues(campos[form].map((campo) => campo.nombre));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleClick = () => {
-    if (form === "Form1") {
-      setForm("Form2");
-    } else {
-      setForm("Form1");
-    }
-  };
+    initialValues(campos.map((campo) => campo.nombre));
+  }, [campos]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderForm = () => {
-    if (campos[form]) {
+    if (campos) {
       return (
         <form onSubmit={handleSubmit}>
-          {campos[form].map((campo) => {
+          {campos.map(({ nombre, tipo }) => {
             return (
-              <div key={campo.nombre} className="form-group">
-                <label>{campo.nombre}</label>
+              <div key={nombre} className="form-group">
+                <label>{nombre}</label>
                 <input
-                  id={campo.nombre}
-                  name={campo.nombre}
-                  type={campo.type}
+                  id={nombre}
+                  name={nombre}
+                  type={tipo}
                   className="form-control"
                   onChange={handleChange}
                 />
+                {errors[nombre] && <p>{errors[nombre]}</p>}
               </div>
             );
           })}
@@ -63,9 +42,8 @@ const Form = () => {
   return (
     <div>
       <div className="d-flex justify-content-between">
-        <h1> {form} </h1>
-        <button className="btn btn-warning" onClick={handleClick}>
-          {" "}
+        <h1> Formulario </h1>
+        <button className="btn btn-warning" onClick={() => handleClick()}>
           Change Form
         </button>
       </div>

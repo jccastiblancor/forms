@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-const useForm = () => {
+const useForm = (validateForm) => {
+  const [errors, setErrors] = useState({});
   const [values, setValues] = useState({});
 
   const handleChange = (evt) => {
@@ -17,17 +18,16 @@ const useForm = () => {
       obj[key] = "";
     }
 
-    setValues({
-      obj,
-    });
+    setValues(obj);
   };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    setErrors(validateForm(values));
     console.log(values);
   };
 
-  return { handleChange, initialValues, handleSubmit };
+  return { handleChange, initialValues, handleSubmit, errors };
 };
 
 export default useForm;
