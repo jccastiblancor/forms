@@ -14,19 +14,25 @@ const Form = ({ campos, handleClick, validateForm }) => {
   const renderForm = () => {
     if (campos) {
       return (
-        <form onSubmit={handleSubmit}>
+        <form noValidate validated="true" onSubmit={handleSubmit}>
           {campos.map(({ nombre, tipo }) => {
             return (
               <div key={nombre} className="form-group">
-                <label>{nombre}</label>
+                <label className={errors[nombre] ? "error" : ""}>
+                  {nombre}
+                </label>
                 <input
+                  className={
+                    errors[nombre] ? "form-error form-control" : "form-control"
+                  }
                   id={nombre}
                   name={nombre}
                   type={tipo}
-                  className="form-control"
                   onChange={handleChange}
                 />
-                {errors[nombre] && <p>{errors[nombre]}</p>}
+                {errors[nombre] && (
+                  <p className="error-small">{errors[nombre]}</p>
+                )}
               </div>
             );
           })}

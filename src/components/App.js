@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Form from "./Form";
+import "../css/main.css";
 
 const App = () => {
   const campos = {
@@ -39,7 +40,7 @@ const App = () => {
       if (values.mail.length === 0) {
         err.mail = "Mail cant be empty";
       }
-      if (values["confirm mail"] !== values.nombre) {
+      if (values["confirm mail"] !== values.mail) {
         err["confirm mail"] = "Mail must be the same";
       }
       if (values.password.length === 0) {
